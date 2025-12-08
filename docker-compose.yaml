@@ -1,0 +1,20 @@
+services:
+  dev:
+    build: .
+    user: "${UID}:${GID}"
+    volumes:
+      # Mount your Repos directory
+      - ~/src/Repos:/repos
+      - tmux-data:/home/developer/.tmux
+      - nvim-config:/home/developer/.config/nvim
+      - nvim-data:/home/developer/.local/share/nvim
+    tty: true
+    stdin_open: true
+    working_dir: /repos
+    environment:
+      - HOME=/home/developer
+
+volumes:
+  tmux-data:
+  nvim-config:
+  nvim-data:

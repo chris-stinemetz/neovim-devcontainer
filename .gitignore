@@ -1,0 +1,11 @@
+# Environment variables (contains user-specific UID/GID)
+.env
+
+# Docker volumes and data
+workspace/
+
+# OS files
+.DS_Store
+*.swp
+*.swo
+*~
