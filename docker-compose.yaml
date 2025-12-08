@@ -5,14 +5,14 @@ services:
     volumes:
       # Mount your Repos directory
       - ~/src/Repos:/repos
-      - tmux-data:/home/developer/.tmux
-      - nvim-config:/home/developer/.config/nvim
-      - nvim-data:/home/developer/.local/share/nvim
+      - tmux-data:/home/dev/.tmux
+      - nvim-config:/home/dev/.config/nvim
+      - nvim-data:/home/dev/.local/share/nvim
     tty: true
     stdin_open: true
     working_dir: /repos
     environment:
-      - HOME=/home/developer
+      - HOME=/home/dev
 
 volumes:
   tmux-data:

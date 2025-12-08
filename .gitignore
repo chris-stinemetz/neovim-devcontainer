@@ -4,6 +4,9 @@
 # Docker volumes and data
 workspace/
 
+# Certificates (optional, user-specific)
+config/
+
 # OS files
 .DS_Store
 *.swp
