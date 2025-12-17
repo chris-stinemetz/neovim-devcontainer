@@ -1,10 +1,11 @@
-# Neovim Development Environment
+# Neovim Development Environment (NvChad)
 
-A Docker-based development environment with Neovim, tmux, and Node.js for consistent coding across machines.
+A Docker-based development environment with **Neovim + NvChad**, tmux, and Node.js for consistent coding across machines.
 
 ## Features
 
 - 🚀 Neovim (latest stable)
+- ✨ NvChad (starter config)
 - 🖥️ tmux with plugin manager (TPM)
 - 📦 Node.js 20.x with npm and yarn
 - 💾 Persistent tmux sessions (tmux-resurrect)
@@ -14,8 +15,18 @@ A Docker-based development environment with Neovim, tmux, and Node.js for consis
 ## Prerequisites
 
 - Docker
-- Docker Compose
+- Docker Compose v2 (`docker compose`)
 - Git
+
+### WSL / Ubuntu note (Compose plugin)
+
+If `docker compose` is missing on Ubuntu/WSL, install the plugin:
+
+```sh
+sudo apt-get update
+sudo apt-get install -y docker-compose-plugin
+docker compose version
+```
 
 ## Quick Start
 
@@ -28,18 +39,25 @@ A Docker-based development environment with Neovim, tmux, and Node.js for consis
 
 2. **Set up environment variables:**
 
-   ```sh
-   cp .env.example .env
-   ```
-
-   Or auto-populate with your UID/GID:
+   This repo runs the container as your user to avoid permission issues on mounted folders.
+   Create a `.env` with your UID/GID:
 
    ```sh
-   echo "UID=$(id -u)" > .env
-   echo "GID=$(id -g)" >> .env
+   printf "UID=%s\nGID=%s\n" "$(id -u)" "$(id -g)" > .env
    ```
 
-3. **Update the volume mount (optional):**
+3. **Install a Nerd Font on your host (required for icons):**
+
+   NvChad (and plugins like `nvim-tree`) use Nerd Font glyphs for icons.
+   Install a Nerd Font on the **host OS** and set it as your terminal font.
+
+   NvChad recommendation:
+   - Prefer the family that **does not end with `Mono`** (icons tend to look smaller with `*Mono`).
+   - Example: **FiraCode Nerd Font** (not **FiraCode Nerd Font Mono**)
+
+   Windows Terminal: Settings → Profile → Appearance → Font face → choose your Nerd Font, then restart the terminal.
+
+4. **Update the volume mount (optional):**
    Edit `docker-compose.yaml` to point to your projects directory:
 
    ```yaml
@@ -47,15 +65,15 @@ A Docker-based development environment with Neovim, tmux, and Node.js for consis
      - ~/src/Repos:/repos # Change this to your projects path
    ```
 
-4. **Build and start the container:**
+5. **Build and start the container:**
 
    ```sh
-   docker-compose up -d --build
+   docker compose up -d --build
    ```
 
-5. **Attach to the tmux session:**
+6. **Attach to the tmux session:**
    ```sh
-   docker-compose exec dev tmux attach
+   docker compose exec dev tmux attach
    ```
 
 ## Usage
@@ -69,6 +87,11 @@ cd /repos/your-project
 nvim .
 ```
 
+### NvChad notes
+
+- First launch may install plugins (give it a minute).
+- If `nvim-tree` icons are missing, it’s almost always your **host terminal font** (see Troubleshooting).
+
 ### tmux Keybindings
 
 - Prefix: `Ctrl+a` (instead of default `Ctrl+b`)
@@ -79,16 +102,16 @@ nvim .
 
 ```sh
 # Stop the container
-docker-compose down
+docker compose down
 
 # Restart the container
-docker-compose restart
+docker compose restart
 
 # View logs
-docker-compose logs -f
+docker compose logs -f
 
 # Rebuild after changes
-docker-compose up -d --build
+docker compose up -d --build
 ```
 
 ## Customization
@@ -98,7 +121,7 @@ docker-compose up -d --build
 Create your Neovim config and it will persist in the `nvim-config` volume:
 
 ```sh
-docker-compose exec dev nvim ~/.config/nvim/init.lua
+docker compose exec dev nvim ~/.config/nvim/init.lua
 ```
 
 ### Modify tmux Config
@@ -106,7 +129,7 @@ docker-compose exec dev nvim ~/.config/nvim/init.lua
 Edit `.tmux.conf` and rebuild:
 
 ```sh
-docker-compose up -d --build
+docker compose up -d --build
 ```
 
 ### Install Additional Tools
@@ -127,22 +150,43 @@ The following are stored in Docker volumes and persist across container restarts
 
 ## Troubleshooting
 
+### Icons missing / wrong in NvChad (`nvim-tree`, statusline)
+
+1. Install a Nerd Font on the **host OS**.
+2. Configure your terminal to use it (choose the non-`Mono` family when available).
+3. Restart the terminal and re-open Neovim.
+
+Quick glyph test from WSL (icons should render if the host terminal font is correct):
+
+```sh
+printf "NerdFont test: \ue0b0  \ue0b1  \ue0a0  \uf115  \uf07b\n"
+```
+
 ### Permission Issues
 
 If you encounter permission issues with files created in the container:
 
 1. Check your `.env` file has correct UID/GID
-2. Rebuild: `docker-compose up -d --build`
+2. Rebuild: `docker compose up -d --build`
 
 ### tmux Session Exits
 
 If tmux exits immediately:
 
 ```sh
-docker-compose logs dev
+docker compose logs dev
 ```
 
 Check for permission errors and ensure `/home/developer` is owned by your UID:GID.
+
+### Reset Neovim state (plugins/data)
+
+This wipes persisted volumes (Neovim config/data/state/cache):
+
+```sh
+docker compose down -v
+docker compose up -d --build
+```
 
 ## License
 

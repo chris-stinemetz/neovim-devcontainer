@@ -7,8 +7,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y ca-certificates openssl && \
     rm -rf /var/lib/apt/lists/*
 
-# Copy certificates (optional - only if config/certs directory exists)
-COPY config/certs/*.crt /usr/local/share/ca-certificates/ 2>/dev/null || true
+# Copy certificates (optional): directory always exists in repo (may be empty)
+COPY config/certs/ /usr/local/share/ca-certificates/
 
 # Update certificates if any were copied
 RUN if [ -n "$(ls -A /usr/local/share/ca-certificates/*.crt 2>/dev/null)" ]; then \
@@ -68,7 +68,7 @@ RUN useradd -m -s /bin/bash -u 1000 dev && \
 
 # Clone Neovim kickstart configuration for dev user
 RUN mkdir -p /home/dev/.config && \
-  git clone https://github.com/nvim-lua/kickstart.nvim.git /home/dev/.config/nvim && \
+  git clone https://github.com/NvChad/starter.git /home/dev/.config/nvim && \
   chown -R dev:dev /home/dev/.config
 
 # Create Neovim data directories with proper permissions
