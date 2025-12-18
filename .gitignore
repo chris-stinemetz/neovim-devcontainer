@@ -5,7 +5,10 @@
 workspace/
 
 # Certificates (optional, user-specific)
-config/
+config/certs/*.crt
+config/certs/*.pem
+config/certs/*.cer
+config/certs/*.key
 
 # OS files
 .DS_Store

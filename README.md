@@ -191,3 +191,11 @@ docker compose up -d --build
 ## License
 
 MIT
+
+## Contributing
+
+PRs and issues are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Security
+
+See [SECURITY.md](SECURITY.md) for vulnerability reporting.

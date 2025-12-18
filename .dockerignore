@@ -1,0 +1,17 @@
+.git
+.gitignore
+.env
+
+# Don’t send runtime state/caches into the image build context
+nvchad-cache/
+nvchad-config/
+nvchad-data/
+nvchad-state/
+tmux/
+fonts/
+
+# Common noise
+**/.DS_Store
+**/*.swp
+**/*.swo
+**/*~

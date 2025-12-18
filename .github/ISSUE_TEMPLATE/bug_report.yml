@@ -1,0 +1,68 @@
+name: Bug report
+description: Report a problem with the containerized NvChad environment
+labels: [bug]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Include error messages and what you expected.
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Provide exact steps/commands.
+      placeholder: |
+        1. docker compose up -d --build
+        2. docker compose exec dev tmux attach
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Paste relevant output.
+      placeholder: |
+        docker compose logs -f --tail=200
+    validations:
+      required: false
+
+  - type: input
+    id: host-os
+    attributes:
+      label: Host OS
+      placeholder: Windows 11 / Ubuntu / macOS
+    validations:
+      required: true
+
+  - type: input
+    id: terminal
+    attributes:
+      label: Terminal
+      placeholder: Windows Terminal / VS Code integrated terminal / WezTerm
+    validations:
+      required: true
+
+  - type: input
+    id: wsl
+    attributes:
+      label: WSL (if applicable)
+      placeholder: Ubuntu-24.04 / N/A
+    validations:
+      required: false
+
+  - type: textarea
+    id: versions
+    attributes:
+      label: Versions
+      description: Paste outputs.
+      placeholder: |
+        docker version
+        docker compose version
+    validations:
+      required: true
